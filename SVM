@@ -1,0 +1,79 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming your data is in a DataFrame called df
+# Replace '...' with actual column names from your dataset
+columns_of_interest = ['Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'ASF']
+
+# Select relevant columns
+df_subset = df[columns_of_interest]
+
+# Draw boxplots
+plt.figure(figsize=(12, 8))
+sns.set(style="whitegrid")  # Set style for better visualization
+
+# Loop through each column and draw boxplot
+for i, column in enumerate(columns_of_interest):
+    plt.subplot(3, 3, i+1)
+    sns.boxplot(x=df_subset[column], color='skyblue')
+    plt.title(f'Boxplot for {column}')
+
+plt.tight_layout()
+plt.show()
+
+columns_of_interest = ['Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'ASF']
+
+# Select relevant columns
+df_subset = df[columns_of_interest]
+
+# Set up subplots
+plt.figure(figsize=(24, 20))
+
+# Loop through each column and plot histogram
+for i, column in enumerate(columns_of_interest, start=1):
+    plt.subplot(4, 2, i)
+    fig = df_subset[column].hist(bins=20, color='skyblue', edgecolor='black')
+    fig.set_xlabel(column)
+    fig.set_ylabel('Frequency')
+    fig.set_title(f'Histogram for {column}')
+
+# Adjust layout
+plt.tight_layout()
+plt.show()
+
+
+from sklearn.svm import SVC
+# instantiate classifier with default hyperparameters
+svc=SVC() 
+# fit classifier to training set
+svc.fit(X_train,Y_train)
+#make predictions on test set
+y_pred=svc.predict(X_test)
+# compute and print accuracy score
+print('Model accuracy score with default hyperparameters: {0:0.4f}'. format(accuracy_score(Y_test, y_pred)))
+# instantiate classifier with linear kernel and C=1.0
+linear_svc=SVC(kernel='linear', C=1.0) 
+# fit classifier to training set
+linear_svc.fit(X_train,Y_train)
+# make predictions on test set
+y_pred_test=linear_svc.predict(X_test)
+# compute and print accuracy score
+print('Model accuracy score with linear kernel and C=1.0 : {0:0.4f}'. format(accuracy_score(Y_test, y_pred_test)))
+from sklearn.metrics import confusion_matrix
+confusion_matrix(Y_test,y_pred)
+
+# Create a confusion matrix
+conf_matrix = confusion_matrix(Y_test, y_pred)
+
+# Plot a heatmap with Seaborn
+plt.figure(figsize=(8, 6))
+sn.heatmap(conf_matrix, annot=True, fmt="d", cmap="Greens")  
+
+# Set labels and title
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix')
+
+# Show the plot
+plt.show()
