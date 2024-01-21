@@ -1,0 +1,36 @@
+from sklearn.ensemble import RandomForestClassifier
+
+# Train the RandomForestClassifier
+model = RandomForestClassifier()
+model.fit(X_train, Y_train)
+# Make predictions on the test set
+predictions = model.predict(X_test)
+# Evaluate the model
+accuracy = accuracy_score(Y_test, predictions)
+print("Accuracy:", accuracy)
+for i in range(0, 3):
+
+    tree = model.estimators_[i]
+# Plot the decision tree
+    plt.figure(figsize=(50, 20))
+    plot_tree(tree, feature_names=X_train.columns.tolist(), filled=True, rounded=True)
+    plt.title(f'Decision Tree {i + 1}')
+    plt.show()
+
+from sklearn.metrics import confusion_matrix
+confusion_matrix(Y_test,y_pred)
+# Create a confusion matrix
+conf_matrix = confusion_matrix(Y_test, y_pred)
+
+# Plot a heatmap with Seaborn
+plt.figure(figsize=(8, 6))
+sn.heatmap(conf_matrix, annot=True, fmt="d", cmap="Greens")  
+
+# Set labels and title
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix')
+
+# Show the plot
+plt.show()
+
