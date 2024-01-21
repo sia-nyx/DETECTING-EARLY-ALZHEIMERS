@@ -1,0 +1,73 @@
+import numpy as np 
+import pandas as pd 
+import seaborn as sn
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier,plot_tree
+from sklearn.tree import export_graphviz
+from sklearn import tree
+
+
+# Drop rows with missing values for simplicity
+df = df.dropna()
+# Convert categorical features to numeric using LabelEncoder
+label_encoder = LabelEncoder()
+df['M/F'] = label_encoder.fit_transform(df['M/F'])
+df['Hand'] = label_encoder.fit_transform(df['Hand'])
+df['Group'] = label_encoder.fit_transform(df['Group'])
+# Separate features (X) and target variable (Y)
+X = df[['M/F', 'Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'ASF']]
+Y = df['Group']
+# Split the dataset into training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+# Create a decision tree classifier
+clf = DecisionTreeClassifier(random_state=42)
+# Fit the classifier on the training data
+clf.fit(X_train, Y_train)
+# Visualize the decision tree
+plt.figure(figsize=(50, 20))
+plot_tree(clf, filled=True, feature_names=X.columns.tolist(), class_names=label_encoder.classes_.tolist())
+plt.show()
+
+# Make predictions on the test set
+y_pred_proba = clf.predict_proba(X_test)
+# Convert lists to NumPy arrays
+Y_test = np.array(Y_test)
+y_pred_proba = np.array(y_pred_proba)
+
+# Print shapes
+print("Shape of Y_test:", Y_test.shape)
+print("Shape of y_pred_proba:", y_pred_proba.shape)
+Y_encoded = pd.get_dummies(Y)
+# Create a decision tree classifier
+tree_clf = DecisionTreeClassifier()
+
+# Train the classifier on the training data
+tree_clf.fit(X_train, Y_train)
+
+# Make predictions on the test set
+y_pred = tree_clf.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(Y_test, y_pred)
+
+# Print accuracy
+print("Accuracy:", accuracy)
+from sklearn.metrics import confusion_matrix
+confusion_matrix(Y_test,y_pred)
+# Create a confusion matrix
+conf_matrix = confusion_matrix(Y_test, y_pred)
+
+# Plot a heatmap with Seaborn
+plt.figure(figsize=(8, 6))
+sn.heatmap(conf_matrix, annot=True, fmt="d", cmap="Greens")  
+
+# Set labels and title
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix')
+
+# Show the plot
+plt.show()
