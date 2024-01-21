@@ -1,0 +1,91 @@
+import numpy as np 
+import pandas as pd 
+import seaborn as sn
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn import datasets, linear_model, metrics
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.compose import ColumnTransformer
+df = pd.read_csv(.../uer/path)
+df
+# print the concise summery of the dataset
+df.info()
+#Dimensions of a data frame
+df.shape
+# Retrieve the column labels 
+df.columns
+#Summary of information about the DataFrame
+df.info()
+# Filter out duplicate rows
+df[df.duplicated()]
+#Summary of the numerical data in that DataFrame
+df.describe()
+#since the dataset contain null values also 
+#count total rows in each column which contain null values
+df.isna().sum()
+import seaborn as sn
+# create a pair plot
+sn.pairplot(df)
+plt.figure(figsize=(10, 6))
+sn.heatmap(df.corr(numeric_only=True), annot=True)
+plt.show()
+df.corr(numeric_only=True)
+# Create a heatmap that visualizes missing (NaN) values in a DataFrame
+sn.heatmap(df.isnull())
+
+
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import LabelEncoder
+
+
+#Remove rows with missing values (NaN) from a DataFrame
+df=df.dropna()
+df
+# Encode categorical variables
+label_encoder = LabelEncoder()
+df['M/F'] = label_encoder.fit_transform(df['M/F'])
+df['Hand'] = label_encoder.fit_transform(df['Hand'])
+# Extract features and target variable
+X = df[['MR Delay', 'M/F', 'Hand', 'Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'ASF']]
+y = df['Group']
+# Split the data into training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+# Create AdaBoost classifier
+boostModel = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=0)
+# Train the model
+boostModel.fit(X_train, Y_train)
+# Make predictions on the test set
+y_pred = boostModel.predict(X_test)
+# Calculate accuracy
+accuracy = accuracy_score(Y_test, y_pred)
+print(f"Accuracy of the AdaBoost model: {accuracy:.2f}")
+from sklearn.metrics import confusion_matrix
+confusion_matrix(Y_test,y_pred)
+# Create a confusion matrix
+conf_matrix = confusion_matrix(Y_test, y_pred)
+
+# Plot a heatmap with Seaborn
+plt.figure(figsize=(8, 6))
+sn.heatmap(conf_matrix, annot=True, fmt="d", cmap="Greens")  
+
+# Set labels and title
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix')
+
+# Show the plot
+plt.show()
+
